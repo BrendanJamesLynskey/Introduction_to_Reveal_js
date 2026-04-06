@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Introduction to Reveal.js</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/black.min.css">
+<style>
+  :root {
+    --amber:  #f5a623;
+    --green:  #4ecb8d;
+    --purple: #a78bfa;
+    --blue:   #60a5fa;
+    --red:    #f87171;
+    --bg:     #0a0a0f;
+    --bg2:    #10101a;
+    --bg3:    #181824;
+    --border: #2a2a3a;
+    --text:   #e8e8f0;
+    --muted:  #8888a8;
+  }
+
+  .reveal-viewport { background: var(--bg); }
+  .reveal .slides section { background: transparent; }
+
+  .reveal { font-family: 'DM Sans', sans-serif; color: var(--text); }
+  .reveal h1, .reveal h2, .reveal h3 { font-family: 'Playfair Display', serif; font-weight: 700; }
+  .reveal h1 { font-size: 1.6em; color: var(--amber); line-height: 1.1; }
+  .reveal h2 { font-size: 1.1em; color: var(--amber); margin-bottom: .2em; }
+  .reveal h3 { font-size: .78em; color: var(--green); margin-bottom: .15em; }
+  .reveal p  { font-size: .56em; line-height: 1.45; color: var(--text); }
+  .reveal li { font-size: .54em; line-height: 1.45; margin-bottom: .1em; }
+  .reveal code { font-family: 'JetBrains Mono', monospace; font-size: .72em; }
+  .reveal pre  { box-shadow: none; background: var(--bg3); border: 1px solid var(--border);
+                 border-radius: 6px; padding: .3em .5em; margin: .25em 0; }
+  .reveal pre code { font-size: .52em; line-height: 1.35; background: transparent; color: #cdd6f4; }
+
+  /* ── slide chrome ── */
+  .slide-hdr {
+    display: flex; align-items: center; gap: .4em;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: .2em; margin-bottom: .3em;
+  }
+  .slide-hdr .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .42em; font-weight: 500;
+    color: var(--bg); background: var(--amber);
+    padding: .1em .4em; border-radius: 3px;
+    letter-spacing: .04em;
+  }
+  .slide-hdr h2 { margin: 0; font-size: .95em; }
+
+  /* ── two-column ── */
+  .cols   { display: grid; gap: .5em; }
+  .cols-2 { grid-template-columns: 1fr 1fr; }
+  .cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .cols-6040 { grid-template-columns: 6fr 4fr; }
+  .cols-4060 { grid-template-columns: 4fr 6fr; }
+
+  /* ── cards ── */
+  .card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 6px; padding: .35em .6em;
+  }
+  .card.amber { border-left: 3px solid var(--amber); }
+  .card.green { border-left: 3px solid var(--green); }
+  .card.purple{ border-left: 3px solid var(--purple); }
+  .card.blue  { border-left: 3px solid var(--blue); }
+  .card.red   { border-left: 3px solid var(--red); }
+  .card h3 { font-size: .64em; margin: 0 0 .12em; }
+  .card p  { font-size: .52em; margin: 0; color: #b8b8d0; }
+  .card ul { margin: 0; padding-left: 1em; }
+  .card li { font-size: .52em; color: #b8b8d0; margin-bottom: .02em; }
+
+  /* ── table ── */
+  .reveal table { width: 100%; border-collapse: collapse; font-size: .5em; }
+  .reveal table th { background: var(--bg3); color: var(--amber); font-weight: 600;
+                     padding: .2em .4em; border: 1px solid var(--border); text-align: left; }
+  .reveal table td { padding: .18em .4em; border: 1px solid var(--border); color: #ccc; }
+  .reveal table tr:nth-child(even) td { background: #0e0e18; }
+
+  /* ── accent spans ── */
+  .a  { color: var(--amber); font-weight: 600; }
+  .g  { color: var(--green); font-weight: 600; }
+  .p  { color: var(--purple); font-weight: 600; }
+  .b  { color: var(--blue); font-weight: 600; }
+  .r  { color: var(--red); font-weight: 600; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* ── SVG graph diagrams ── */
+  svg.diagram { display: block; margin: 0 auto; overflow: visible; }
+
+  /* ── pill badges ── */
+  .pill {
+    display: inline-block; font-family: 'JetBrains Mono', monospace;
+    font-size: .44em; padding: .08em .4em; border-radius: 99px;
+    border: 1px solid; margin: 0 .08em;
+  }
+  .pill.amber { color: var(--amber); border-color: var(--amber); }
+  .pill.green { color: var(--green); border-color: var(--green); }
+  .pill.purple{ color: var(--purple); border-color: var(--purple); }
+  .pill.blue  { color: var(--blue); border-color: var(--blue); }
+
+  /* ── footer — hidden ── */
+  .reveal .slide-footer { display: none; }
+  /* title slide special */
+  .title-slide h1 { font-size: 1.8em; }
+  .title-slide .subtitle {
+    font-size: .7em; color: var(--green); font-family: 'DM Sans', sans-serif;
+    font-weight: 300; letter-spacing: .04em; margin: .3em 0 .6em;
+  }
+  .title-slide .meta { font-size: .48em; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+
+  /* reduce default margins */
+  .reveal ul, .reveal ol { margin: .15em 0 .15em 1em; }
+  .reveal .slides > section { display: flex !important; flex-direction: column !important; overflow-y: auto !important; align-items: stretch !important; justify-content: flex-start !important; }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+
+<!-- ═══════════════════════════════ SLIDE 01 — TITLE ═══════════════════════════════ -->
+<section class="title-slide" data-background-color="#0a0a0f">
+  <div style="text-align:left; max-width:820px; margin:0 auto; padding: 1em 0;">
+    <div style="font-family:'JetBrains Mono',monospace; font-size:.5em; color:var(--muted); margin-bottom:.4em; letter-spacing:.1em;">TECHNICAL PRESENTATION</div>
+    <h1>Introduction to<br>Reveal.js</h1>
+    <div class="subtitle">HTML Presentations Made Beautiful</div>
+    <div style="width:60px; height:3px; background:var(--amber); margin-bottom:1.4em;"></div>
+    <div class="meta">slides &middot; Markdown &middot; themes &middot; plugins &middot; speaker notes &middot; PDF export</div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 02 — AGENDA ═══════════════════════════════ -->
+<section>
+  <div class="slide-hdr"><span class="tag">02</span><h2>Agenda</h2></div>
+  <div class="cols cols-2">
+    <div class="card amber">
+      <h3>Foundations</h3>
+      <ul>
+        <li>What is Reveal.js &amp; its history</li>
+        <li>Getting started &mdash; CDN, npm, CLI</li>
+        <li>Slide structure &amp; navigation</li>
+        <li>Markdown support</li>
+      </ul>
+    </div>
+    <div class="card green">
+      <h3>Visual Design</h3>
+      <ul>
+        <li>Transitions &amp; animations</li>
+        <li>Fragments &amp; step-through reveals</li>
+        <li>Code highlighting with highlight.js</li>
+        <li>Themes &amp; custom styling</li>
+      </ul>
+    </div>
+    <div class="card purple">
+      <h3>Advanced Features</h3>
+      <ul>
+        <li>Layout &amp; responsive design</li>
+        <li>Media &amp; backgrounds</li>
+        <li>Speaker notes &amp; presenter view</li>
+        <li>Configuration options</li>
+      </ul>
+    </div>
+    <div class="card blue">
+      <h3>Production</h3>
+      <ul>
+        <li>Plugins &amp; extensibility</li>
+        <li>PDF export &amp; printing</li>
+        <li>Multiplexing &amp; remote control</li>
+        <li>Hosting &amp; deployment</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 03 — WHAT IS REVEAL.JS ═══════════════════════════════ -->
+<section>
+  <div class="slide-hdr"><span class="tag">03</span><h2>What Is Reveal.js?</h2></div>
+  <div class="cols cols-6040">
+    <div>
+      <p>Reveal.js is an <span class="a">open-source HTML presentation framework</span> created by <span class="g">Hakim El Hattab</span> in 2011. It transforms standard HTML into beautiful, interactive slide decks that run directly in the browser.</p>
+      <p>With over <span class="p">67,000 GitHub stars</span>, it powers millions of presentations worldwide &mdash; including talks at major tech conferences, university lectures, and corporate training.</p>
+      <div class="card amber" style="margin-top:.3em;">
+        <h3>Key Features</h3>
+        <ul>
+          <li>Nested slides (horizontal + vertical navigation)</li>
+          <li>Markdown support (inline and external files)</li>
+          <li>Syntax-highlighted code with line numbers</li>
+          <li>Speaker notes with timer and preview</li>
+          <li>PDF export, touch support, and rich plugin API</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card green">
+        <h3>Who Uses It?</h3>
+        <ul>
+          <li>Google, Mozilla, Microsoft</li>
+          <li>University lecturers worldwide</li>
+          <li>Conference speakers (JSConf, CSSConf)</li>
+          <li>Developer advocates &amp; trainers</li>
+          <li>Open-source project maintainers</li>
+        </ul>
+      </div>
+      <div class="card purple" style="margin-top:.4em;">
+        <h3>Timeline</h3>
+        <ul>
+          <li><span class="a">2011</span> &mdash; First release by Hakim El Hattab</li>
+          <li><span class="a">2013</span> &mdash; Plugin ecosystem grows</li>
+          <li><span class="a">2020</span> &mdash; v4.0 rewrite (ES modules)</li>
+          <li><span class="a">2023</span> &mdash; v4.6 with improved accessibility</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 04 — GETTING STARTED ═══════════════════════════════ -->
+<section>
+  <div class="slide-hdr"><span class="tag">04</span><h2>Getting Started</h2></div>
+  <p>Three ways to set up a Reveal.js presentation &mdash; pick whichever fits your workflow:</p>
+  <div class="cols cols-3">
+    <div class="card amber">
+      <h3>CDN (Simplest)</h3>
+      <p>Link directly to hosted files. Zero setup, single HTML file, works offline once cached.</p>
+    </div>
+    <div class="card green">
+      <h3>npm Install</h3>
+      <p>Full development environment with live reload, Sass compilation, and plugin management.</p>
+    </div>
+    <div class="card purple">
+      <h3>CLI (create-reveal)</h3>
+      <p>Scaffold a new presentation with <code>npx create-reveal</code>. Templates and configuration included.</p>
+    </div>
+  </div>
+  <p style="margin-top:.3em;"><span class="a">Minimal CDN boilerplate</span> &mdash; this is all you need:</p>
+  <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css"&gt;
+  &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/black.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class="reveal"&gt;
+    &lt;div class="slides"&gt;
+      &lt;section&gt;Slide 1&lt;/section&gt;
+      &lt;section&gt;Slide 2&lt;/section&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"&gt;&lt;/script&gt;
+  &lt;script&gt;Reveal.initialize();&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 05 — SLIDE STRUCTURE ═══════════════════════════════ -->
+<section>
+  <div class="slide-hdr"><span class="tag">05</span><h2>Slide Structure</h2></div>
+  <div class="cols cols-6040">
+    <div>
+      <p>Every slide is a <code>&lt;section&gt;</code> element inside <code>.slides</code>. Reveal.js supports <span class="a">horizontal</span> (left/right) and <span class="g">vertical</span> (up/down) navigation by nesting sections.</p>
+      <pre><code class="language-html">&lt;div class="reveal"&gt;
+  &lt;div class="slides"&gt;
+    &lt;!-- Horizontal slide 1 --&gt;
+    &lt;section&gt;Slide 1&lt;/section&gt;
+
+    &lt;!-- Vertical stack --&gt;
+    &lt;section&gt;
+      &lt;section&gt;Vertical 1&lt;/section&gt;
+      &lt;section&gt;Vertical 2&lt;/section&gt;
+    &lt;/section&gt;
+
+    &lt;!-- Horizontal slide 3 --&gt;
+    &lt;section id="named"
+             data-background="#4ecb8d"
+             data-transition="zoom"&gt;
+      Custom slide
+    &lt;/section&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+    <div>
+      <div class="card amber">
+        <h3>Data Attributes</h3>
+        <ul>
+          <li><code>data-background</code> &mdash; colour, image, video, iframe</li>
+          <li><code>data-transition</code> &mdash; per-slide transition</li>
+          <li><code>data-auto-animate</code> &mdash; morph between slides</li>
+          <li><code>data-visibility</code> &mdash; hidden or uncounted</li>
+          <li><code>id</code> &mdash; deep-linkable URL hash</li>
+        </ul>
+      </div>
+      <div class="card green" style="margin-top:.4em;">
+        <h3>Navigation Model</h3>
+        <p><span class="a">Horizontal</span> = chapters or main topics</p>
+        <p><span class="g">Vertical</span> = sub-topics or detail drilldowns</p>
+        <p>Press <span class="b">Esc</span> for the overview grid, <span class="b">O</span> for overview mode. Arrow keys or swipe to navigate.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 06 — MARKDOWN SUPPORT ═══════════════════════════════ -->
+<section>
+  <div class="slide-hdr"><span class="tag">06</span><h2>Markdown Support</h2></div>
+  <p>Write slides in Markdown instead of HTML. Reveal.js uses the <span class="a">marked</span> parser and supports both <span class="g">inline</span> and <span class="p">external file</span> Markdown.</p>
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3>Inline Markdown</h3>
+        <p>Embed Markdown directly inside a <code>&lt;section&gt;</code>:</p>
+      </div>
+      <pre><code class="language-html">&lt;section data-markdown&gt;
+  &lt;textarea data-template&gt;
+    ## Slide Title
+
+    - Bullet one
+    - Bullet two
+
+    ```js
+    console.log('Hello');
+    ```
+  &lt;/textarea&gt;
+&lt;/section&gt;</code></pre>
+    </div>
+    <div>
+      <div class="card green">
+        <h3>External Markdown File</h3>
+        <p>Load slides from a separate <code>.md</code> file:</p>
+      </div>
+      <pre><code class="language-html">&lt;section data-markdown="slides.md"
+         data-separator="^---$"
+         data-separator-vertical="^--$"
+         data-separator-notes="^Notes:"&gt;
+&lt;/section&gt;</code></pre>
+      <div class="card purple" style="margin-top:.3em;">
+        <h3>Element Attributes</h3>
+        <p>Add HTML attributes via special comments:</p>
+      </div>
+      <pre><code class="language-markdown">Item 1 &lt;!-- .element: class="fragment" --&gt;
+Item 2 &lt;!-- .element: class="fragment" --&gt;</code></pre>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 07 — TRANSITIONS & ANIMATIONS ═══════════════════════════════ -->
+<section>
+  <div class="slide-hdr"><span class="tag">07</span><h2>Transitions &amp; Animations</h2></div>
+  <div class="cols cols-6040">
+    <div>
+      <p>Control how slides enter and exit with <span class="a">transition effects</span>. Set globally in config or per-slide with <code>data-transition</code>.</p>
+      <table>
+        <tr><th>Transition</th><th>Description</th></tr>
+        <tr><td><code>none</code></td><td>Instant switch, no animation</td></tr>
+        <tr><td><code>fade</code></td><td>Cross-fade between slides</td></tr>
+        <tr><td><code>slide</code></td><td>Slide in from the right</td></tr>
+        <tr><td><code>convex</code></td><td>Slide with 3D convex curve</td></tr>
+        <tr><td><code>concave</code></td><td>Slide with 3D concave curve</td></tr>
+        <tr><td><code>zoom</code></td><td>Zoom in to the next slide</td></tr>
+      </table>
+      <pre><code class="language-html">&lt;!-- Per-slide transition --&gt;
+&lt;section data-transition="zoom"&gt;
+  Zooms in!
+&lt;/section&gt;
+
+&lt;!-- Mixed in/out --&gt;
+&lt;section data-transition="fade-in slide-out"&gt;
+  Fades in, slides out
+&lt;/section&gt;</code></pre>
+    </div>
+    <div>
+      <div class="card green">
+        <h3>Auto-Animate</h3>
+        <p>Automatically animate matching elements between consecutive slides. Just add <code>data-auto-animate</code> to both sections:</p>
+      </div>
+      <pre><code class="language-html">&lt;section data-auto-animate&gt;
+  &lt;h1&gt;Hello&lt;/h1&gt;
+&lt;/section&gt;
+&lt;section data-auto-animate&gt;
+  &lt;h1 style="color:red;"&gt;Hello&lt;/h1&gt;
+  &lt;p&gt;World&lt;/p&gt;
+&lt;/section&gt;</code></pre>
+      <div class="card purple" style="margin-top:.3em;">
+        <h3>Auto-Animate Options</h3>
+        <ul>
+          <li><code>data-auto-animate-easing</code> &mdash; CSS easing function</li>
+          <li><code>data-auto-animate-duration</code> &mdash; seconds (default 1.0)</li>
+          <li><code>data-auto-animate-unmatched</code> &mdash; fade or hide</li>
+          <li><code>data-id</code> &mdash; explicitly match elements across slides</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 08 — FRAGMENTS ═══════════════════════════════ -->
+<section>
+  <div class="slide-hdr"><span class="tag">08</span><h2>Fragments</h2></div>
+  <p>Fragments reveal elements <span class="a">step-by-step</span> within a single slide. Add the <code>fragment</code> class and optionally a style class to control the animation.</p>
+  <div class="cols cols-2">
+    <div>
+      <table>
+        <tr><th>Class</th><th>Effect</th></tr>
+        <tr><td><code>fade-in</code></td><td>Fades in (default)</td></tr>
+        <tr><td><code>fade-out</code></td><td>Starts visible, fades out</td></tr>
+        <tr><td><code>fade-up</code></td><td>Slides up while fading in</td></tr>
+        <tr><td><code>fade-down</code></td><td>Slides down while fading in</td></tr>
+        <tr><td><code>highlight-red</code></td><td>Text turns red</td></tr>
+        <tr><td><code>highlight-green</code></td><td>Text turns green</td></tr>
+        <tr><td><code>highlight-blue</code></td><td>Text turns blue</td></tr>
+        <tr><td><code>grow</code></td><td>Scales up</td></tr>
+        <tr><td><code>shrink</code></td><td>Scales down</td></tr>
+        <tr><td><code>strike</code></td><td>Strikethrough text</td></tr>
+        <tr><td><code>semi-fade-out</code></td><td>Fades to 50% opacity</td></tr>
+      </table>
+    </div>
+    <div>
+      <div class="card amber">
+        <h3>Basic Usage</h3>
+      </div>
+      <pre><code class="language-html">&lt;p class="fragment"&gt;Appears first&lt;/p&gt;
+&lt;p class="fragment fade-up"&gt;Slides up&lt;/p&gt;
+&lt;p class="fragment highlight-red"&gt;Turns red&lt;/p&gt;</code></pre>
+      <div class="card green" style="margin-top:.3em;">
+        <h3>Ordering &amp; Nesting</h3>
+      </div>
+      <pre><code class="language-html">&lt;!-- Custom order with data-fragment-index --&gt;
+&lt;p class="fragment" data-fragment-index="2"&gt;Second&lt;/p&gt;
+&lt;p class="fragment" data-fragment-index="1"&gt;First&lt;/p&gt;
+
+&lt;!-- Nested: fade in, then highlight --&gt;
+&lt;span class="fragment fade-in"&gt;
+  &lt;span class="fragment highlight-green"&gt;
+    Two-step reveal
+  &lt;/span&gt;
+&lt;/span&gt;</code></pre>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 09 — CODE HIGHLIGHTING ═══════════════════════════════ -->
+<section>
+  <div class="slide-hdr"><span class="tag">09</span><h2>Code Highlighting</h2></div>
+  <p>Reveal.js integrates <span class="a">highlight.js</span> for syntax highlighting across 190+ languages. Line numbers and <span class="g">step-through highlighting</span> make code walkthroughs powerful.</p>
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3>Basic Code Block</h3>
+      </div>
+      <pre><code class="language-html">&lt;pre&gt;&lt;code class="language-javascript"&gt;
+function greet(name) {
+  return `Hello, ${name}!`;
+}
+&lt;/code&gt;&lt;/pre&gt;</code></pre>
+      <div class="card green" style="margin-top:.3em;">
+        <h3>Line Numbers</h3>
+      </div>
+      <pre><code class="language-html">&lt;!-- Show all line numbers --&gt;
+&lt;pre&gt;&lt;code data-line-numbers&gt;
+const x = 1;
+const y = 2;
+const z = x + y;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- Highlight specific lines --&gt;
+&lt;pre&gt;&lt;code data-line-numbers="1|3|5-7"&gt;
+// Step through highlighted lines
+// using the pipe separator
+&lt;/code&gt;&lt;/pre&gt;</code></pre>
+    </div>
+    <div>
+      <div class="card purple">
+        <h3>Step-Through Example</h3>
+        <p>Use <code>data-line-numbers="1-2|3-4|5-6"</code> to walk through code in stages. Each pipe creates a new fragment step.</p>
+      </div>
+      <pre><code class="language-javascript" data-line-numbers="1-2|4-5|7-9">// 1. Import the framework
+import Reveal from 'reveal.js';
+
+// 2. Configure options
+const deck = new Reveal({ transition: 'fade' });
+
+// 3. Initialize
+deck.initialize().then(() => {
+  console.log('Presentation ready!');
+});</code></pre>
+      <div class="card blue" style="margin-top:.3em;">
+        <h3>Plugin Setup</h3>
+      </div>
+      <pre><code class="language-javascript">Reveal.initialize({
+  plugins: [RevealHighlight],
+  highlight: { theme: 'monokai' }
+});</code></pre>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 10 — THEMES ═══════════════════════════════ -->
+<section>
+  <div class="slide-hdr"><span class="tag">10</span><h2>Themes</h2></div>
+  <p>Reveal.js ships with <span class="a">12 built-in themes</span>. Switch themes by changing one CSS import, or build a fully custom theme using CSS custom properties.</p>
+  <div class="cols cols-2">
+    <div>
+      <table>
+        <tr><th>Theme</th><th>Style</th></tr>
+        <tr><td><code>black</code></td><td>Dark background, white text (default)</td></tr>
+        <tr><td><code>white</code></td><td>Light background, dark text</td></tr>
+        <tr><td><code>league</code></td><td>Grey textured background</td></tr>
+        <tr><td><code>beige</code></td><td>Warm beige tones</td></tr>
+        <tr><td><code>sky</code></td><td>Light blue gradient</td></tr>
+        <tr><td><code>night</code></td><td>Dark blue background</td></tr>
+        <tr><td><code>serif</code></td><td>Serif fonts, cappuccino feel</td></tr>
+        <tr><td><code>simple</code></td><td>Minimal white design</td></tr>
+        <tr><td><code>solarized</code></td><td>Solarized colour scheme</td></tr>
+        <tr><td><code>moon</code></td><td>Dark with muted blue</td></tr>
+        <tr><td><code>dracula</code></td><td>Dracula colour palette</td></tr>
+        <tr><td><code>blood</code></td><td>Dark with red accents</td></tr>
+      </table>
+    </div>
+    <div>
+      <div class="card amber">
+        <h3>Switching Themes</h3>
+      </div>
+      <pre><code class="language-html">&lt;!-- Just change the CSS file --&gt;
+&lt;link rel="stylesheet"
+  href="dist/theme/dracula.css"&gt;</code></pre>
+      <div class="card green" style="margin-top:.3em;">
+        <h3>Custom Theme (CSS Variables)</h3>
+      </div>
+      <pre><code class="language-css">:root {
+  --r-background-color: #0a0a0f;
+  --r-main-font: 'DM Sans', sans-serif;
+  --r-main-color: #e8e8f0;
+  --r-heading-font: 'Playfair Display', serif;
+  --r-heading-color: #f5a623;
+  --r-link-color: #60a5fa;
+  --r-link-color-hover: #a78bfa;
+  --r-selection-background-color: #f5a623;
+}</code></pre>
+      <div class="card purple" style="margin-top:.3em;">
+        <h3>Theme Source</h3>
+        <p>Themes are Sass files in <code>css/theme/source/</code>. Compile with <code>npm run build</code> or write plain CSS overrides.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 11 — LAYOUT & STYLING ═══════════════════════════════ -->
+<section>
+  <div class="slide-hdr"><span class="tag">11</span><h2>Layout &amp; Styling</h2></div>
+  <div class="cols cols-6040">
+    <div>
+      <p>Reveal.js uses a <span class="a">fixed viewport</span> model. Slides are authored at a reference size and scaled to fit the display. CSS Grid and Flexbox work normally inside slides.</p>
+      <div class="card amber">
+        <h3>Viewport Configuration</h3>
+      </div>
+      <pre><code class="language-javascript">Reveal.initialize({
+  width: 1100,    // Reference width in pixels
+  height: 900,    // Reference height in pixels
+  margin: 0.04,   // Margin around slides (fraction)
+  minScale: 0.2,  // Minimum scale factor
+  maxScale: 2.0   // Maximum scale factor
+});</code></pre>
+      <div class="card green" style="margin-top:.3em;">
+        <h3>CSS Grid in Slides</h3>
+      </div>
+      <pre><code class="language-css">/* Two-column layout */
+.cols-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5em;
+}
+
+/* Asymmetric 60/40 split */
+.cols-6040 {
+  grid-template-columns: 6fr 4fr;
+}</code></pre>
+    </div>
+    <div>
+      <div class="card purple">
+        <h3>Responsive Tips</h3>
+        <ul>
+          <li>Use <span class="a">em</span> units for font sizes &mdash; they scale with the viewport</li>
+          <li>Avoid fixed pixel widths; use <span class="g">percentages</span> or <span class="g">fr</span> units</li>
+          <li>Test at different aspect ratios with <code>width</code> and <code>height</code></li>
+          <li>The <code>r-stretch</code> class auto-sizes images and media to fill available space</li>
+        </ul>
+      </div>
+      <div class="card blue" style="margin-top:.4em;">
+        <h3>Useful CSS Classes</h3>
+        <ul>
+          <li><code>r-stretch</code> &mdash; stretch element to fill space</li>
+          <li><code>r-fit-text</code> &mdash; auto-size text to fit slide</li>
+          <li><code>r-stack</code> &mdash; stack children on top of each other</li>
+          <li><code>r-frame</code> &mdash; add a thin border frame</li>
+          <li><code>r-hstack</code> / <code>r-vstack</code> &mdash; flex row/column</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 12 — MEDIA & BACKGROUNDS ═══════════════════════════════ -->
+<section>
+  <div class="slide-hdr"><span class="tag">12</span><h2>Media &amp; Backgrounds</h2></div>
+  <p>Each slide can have its own <span class="a">full-bleed background</span> &mdash; colours, images, videos, or even live iframes. Media inside slides can auto-play and lazy-load.</p>
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3>Background Types</h3>
+      </div>
+      <pre><code class="language-html">&lt;!-- Solid colour --&gt;
+&lt;section data-background-color="#4ecb8d"&gt;
+
+&lt;!-- Image --&gt;
+&lt;section data-background-image="bg.jpg"
+         data-background-size="cover"
+         data-background-opacity="0.3"&gt;
+
+&lt;!-- Video --&gt;
+&lt;section data-background-video="bg.mp4"
+         data-background-video-loop
+         data-background-video-muted&gt;
+
+&lt;!-- Gradient --&gt;
+&lt;section data-background-gradient=
+  "linear-gradient(to right, #0a0a0f, #1a1a3f)"&gt;
+
+&lt;!-- Live iframe --&gt;
+&lt;section data-background-iframe=
+  "https://revealjs.com"
+  data-background-interactive&gt;</code></pre>
+    </div>
+    <div>
+      <div class="card green">
+        <h3>Inline Media</h3>
+      </div>
+      <pre><code class="language-html">&lt;!-- Auto-play video on slide enter --&gt;
+&lt;video data-autoplay src="demo.mp4"&gt;&lt;/video&gt;
+
+&lt;!-- Lazy-loaded iframe --&gt;
+&lt;iframe data-src="https://example.com"
+        width="800" height="500"&gt;
+&lt;/iframe&gt;
+
+&lt;!-- Stretch image to fill --&gt;
+&lt;img class="r-stretch" src="chart.png"&gt;</code></pre>
+      <div class="card purple" style="margin-top:.3em;">
+        <h3>Background Transitions</h3>
+        <p>Control how backgrounds animate between slides:</p>
+      </div>
+      <pre><code class="language-javascript">Reveal.initialize({
+  backgroundTransition: 'fade' // or slide, convex, concave, zoom
+});</code></pre>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 13 — SPEAKER NOTES ═══════════════════════════════ -->
+<section>
+  <div class="slide-hdr"><span class="tag">13</span><h2>Speaker Notes</h2></div>
+  <div class="cols cols-6040">
+    <div>
+      <p>Press <span class="a">S</span> to open the <span class="g">speaker view</span> in a new window. It shows your notes, a timer, the current slide, and a preview of the upcoming slide.</p>
+      <div class="card amber">
+        <h3>Adding Notes in HTML</h3>
+      </div>
+      <pre><code class="language-html">&lt;section&gt;
+  &lt;h2&gt;My Slide&lt;/h2&gt;
+  &lt;p&gt;Visible content&lt;/p&gt;
+
+  &lt;aside class="notes"&gt;
+    These notes are only visible
+    in the speaker view.
+    - Remember to mention X
+    - Demo the feature live
+  &lt;/aside&gt;
+&lt;/section&gt;</code></pre>
+      <div class="card green" style="margin-top:.3em;">
+        <h3>Notes in Markdown</h3>
+      </div>
+      <pre><code class="language-markdown">## My Slide
+
+Visible content here.
+
+Notes:
+These notes are only visible
+in the speaker view.</code></pre>
+    </div>
+    <div>
+      <div class="card purple">
+        <h3>Speaker View Features</h3>
+        <ul>
+          <li><span class="a">Current slide</span> &mdash; what the audience sees</li>
+          <li><span class="g">Next slide</span> &mdash; preview of what comes next</li>
+          <li><span class="p">Notes pane</span> &mdash; your speaker notes (HTML supported)</li>
+          <li><span class="b">Timer</span> &mdash; elapsed time since start</li>
+          <li><span class="r">Clock</span> &mdash; current wall-clock time</li>
+        </ul>
+      </div>
+      <div class="card blue" style="margin-top:.4em;">
+        <h3>Plugin Setup</h3>
+      </div>
+      <pre><code class="language-javascript">import RevealNotes from 'reveal.js/plugin/notes/notes';
+
+Reveal.initialize({
+  plugins: [RevealNotes]
+});
+
+// Or from CDN:
+// plugin/notes/notes.js</code></pre>
+      <div class="card red" style="margin-top:.3em;">
+        <h3>Pro Tip</h3>
+        <p>Speaker view works cross-window. Open it on your laptop screen while projecting the main presentation on the big screen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 14 — CONFIGURATION OPTIONS ═══════════════════════════════ -->
+<section>
+  <div class="slide-hdr"><span class="tag">14</span><h2>Configuration Options</h2></div>
+  <p>Reveal.js exposes <span class="a">dozens of configuration properties</span>. Pass them to <code>Reveal.initialize()</code> to customise every aspect of behaviour.</p>
+  <div class="cols cols-2">
+    <div>
+      <table>
+        <tr><th>Option</th><th>Default</th><th>Description</th></tr>
+        <tr><td><code>controls</code></td><td><code>true</code></td><td>Show navigation arrows</td></tr>
+        <tr><td><code>progress</code></td><td><code>true</code></td><td>Show progress bar</td></tr>
+        <tr><td><code>hash</code></td><td><code>false</code></td><td>Update URL hash on slide change</td></tr>
+        <tr><td><code>history</code></td><td><code>false</code></td><td>Push slide changes to browser history</td></tr>
+        <tr><td><code>keyboard</code></td><td><code>true</code></td><td>Enable keyboard navigation</td></tr>
+        <tr><td><code>touch</code></td><td><code>true</code></td><td>Enable touch/swipe navigation</td></tr>
+        <tr><td><code>loop</code></td><td><code>false</code></td><td>Loop the presentation</td></tr>
+        <tr><td><code>autoSlide</code></td><td><code>0</code></td><td>Auto-advance interval (ms)</td></tr>
+        <tr><td><code>center</code></td><td><code>true</code></td><td>Vertically centre slide content</td></tr>
+        <tr><td><code>embedded</code></td><td><code>false</code></td><td>Run inside an iframe</td></tr>
+      </table>
+    </div>
+    <div>
+      <div class="card amber">
+        <h3>Full Example</h3>
+      </div>
+      <pre><code class="language-javascript">Reveal.initialize({
+  hash: true,
+  history: true,
+  transition: 'fade',
+  transitionSpeed: 'fast',
+
+  // Display
+  controls: true,
+  progress: true,
+  center: false,
+  slideNumber: 'c/t',
+
+  // Viewport
+  width: 1100,
+  height: 900,
+  margin: 0.04,
+
+  // Auto-advance (0 = off)
+  autoSlide: 0,
+  autoSlideStoppable: true,
+
+  // Plugins
+  plugins: [
+    RevealHighlight,
+    RevealNotes,
+    RevealMarkdown
+  ]
+});</code></pre>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 15 — PLUGINS ═══════════════════════════════ -->
+<section>
+  <div class="slide-hdr"><span class="tag">15</span><h2>Plugins</h2></div>
+  <div class="cols cols-6040">
+    <div>
+      <p>Reveal.js has a <span class="a">modular plugin system</span>. Built-in plugins ship with the framework; third-party plugins extend it further. Writing your own plugin is straightforward.</p>
+      <div class="card amber">
+        <h3>Built-in Plugins</h3>
+        <ul>
+          <li><span class="a">RevealHighlight</span> &mdash; syntax highlighting</li>
+          <li><span class="g">RevealMarkdown</span> &mdash; Markdown slide authoring</li>
+          <li><span class="p">RevealNotes</span> &mdash; speaker notes + presenter view</li>
+          <li><span class="b">RevealMath</span> &mdash; LaTeX / MathJax / KaTeX rendering</li>
+          <li><span class="r">RevealSearch</span> &mdash; Ctrl+Shift+F search within slides</li>
+          <li><span class="a">RevealZoom</span> &mdash; Alt+click zoom into elements</li>
+        </ul>
+      </div>
+      <div class="card green" style="margin-top:.3em;">
+        <h3>Popular Third-Party Plugins</h3>
+        <ul>
+          <li><span class="a">reveal-plantuml</span> &mdash; UML diagrams from text</li>
+          <li><span class="g">reveal.js-menu</span> &mdash; hamburger slide menu</li>
+          <li><span class="p">reveal.js-copycode</span> &mdash; copy button for code blocks</li>
+          <li><span class="b">reveal-sampler</span> &mdash; embed code from external files</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card purple">
+        <h3>Writing a Custom Plugin</h3>
+      </div>
+      <pre><code class="language-javascript">const MyPlugin = {
+  id: 'my-plugin',
+
+  init: (reveal) => {
+    // Called when Reveal.js initialises
+    console.log('Slides:', reveal.getTotalSlides());
+
+    // Listen to events
+    reveal.on('slidechanged', (event) => {
+      console.log('Now on slide', event.indexh);
+    });
+
+    // Access the API
+    reveal.getSlides().forEach(slide => {
+      // Modify slides programmatically
+    });
+  },
+
+  destroy: () => {
+    // Cleanup when plugin is removed
+  }
+};
+
+// Register the plugin
+Reveal.initialize({
+  plugins: [MyPlugin]
+});</code></pre>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 16 — PDF EXPORT ═══════════════════════════════ -->
+<section>
+  <div class="slide-hdr"><span class="tag">16</span><h2>PDF Export</h2></div>
+  <div class="cols cols-6040">
+    <div>
+      <p>Reveal.js supports <span class="a">PDF export</span> through a special print stylesheet. Append <code>?print-pdf</code> to your URL, then use the browser's Print dialog.</p>
+      <div class="card amber">
+        <h3>Browser Export (Built-in)</h3>
+        <ul>
+          <li>Navigate to <code>presentation.html?print-pdf</code></li>
+          <li>Open Print dialog (<span class="b">Ctrl+P</span> / <span class="b">Cmd+P</span>)</li>
+          <li>Set paper size to match slide dimensions</li>
+          <li>Enable &ldquo;Background graphics&rdquo;</li>
+          <li>Save as PDF</li>
+        </ul>
+      </div>
+      <div class="card green" style="margin-top:.3em;">
+        <h3>Print-Specific CSS</h3>
+      </div>
+      <pre><code class="language-css">/* Only applies in print-pdf mode */
+@media print {
+  .reveal .slides section {
+    page-break-after: always;
+    min-height: 100%;
+  }
+  .no-print { display: none; }
+}</code></pre>
+    </div>
+    <div>
+      <div class="card purple">
+        <h3>Decktape (CLI Tool)</h3>
+        <p>For reliable, automated PDF export, use <span class="a">Decktape</span> &mdash; a headless Chrome-based tool designed for slide decks.</p>
+      </div>
+      <pre><code class="language-bash"># Install globally
+npm install -g decktape
+
+# Export to PDF
+decktape reveal \
+  http://localhost:8000 \
+  output.pdf
+
+# Custom page size
+decktape reveal \
+  --size 1100x900 \
+  presentation.html \
+  slides.pdf</code></pre>
+      <div class="card blue" style="margin-top:.3em;">
+        <h3>Tips for Good PDFs</h3>
+        <ul>
+          <li>Fragments become separate pages (each step = one page)</li>
+          <li>Backgrounds and gradients export correctly</li>
+          <li>Test with <code>?print-pdf</code> <em>before</em> your talk</li>
+          <li>Use <code>pdfSeparateFragments: false</code> to collapse fragments</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 17 — MULTIPLEXING & REMOTE CONTROL ═══════════════════════════════ -->
+<section>
+  <div class="slide-hdr"><span class="tag">17</span><h2>Multiplexing &amp; Remote Control</h2></div>
+  <div class="cols cols-6040">
+    <div>
+      <p>The <span class="a">multiplex plugin</span> lets a presenter control slide navigation across multiple client browsers in real time via <span class="g">Socket.io</span>.</p>
+      <div class="card amber">
+        <h3>How It Works</h3>
+        <ul>
+          <li><span class="a">Master</span> &mdash; presenter's browser broadcasts slide changes</li>
+          <li><span class="g">Client</span> &mdash; audience browsers receive and follow along</li>
+          <li>Communication via a <span class="p">Socket.io server</span> (self-hosted or public)</li>
+          <li>Secret token prevents audience from hijacking navigation</li>
+        </ul>
+      </div>
+      <pre><code class="language-javascript">// Master (presenter) configuration
+Reveal.initialize({
+  multiplex: {
+    secret: 'your-secret-token',
+    id: 'presentation-id',
+    url: 'https://reveal-multiplex.glitch.me'
+  },
+  plugins: [RevealMultiplex]
+});</code></pre>
+    </div>
+    <div>
+      <div class="card green">
+        <h3>Client Configuration</h3>
+      </div>
+      <pre><code class="language-javascript">// Client (audience) configuration
+Reveal.initialize({
+  multiplex: {
+    // No secret — clients can't control
+    id: 'presentation-id',
+    url: 'https://reveal-multiplex.glitch.me'
+  },
+  plugins: [RevealMultiplex]
+});</code></pre>
+      <div class="card purple" style="margin-top:.3em;">
+        <h3>Alternatives</h3>
+        <ul>
+          <li><span class="a">reveal-remote</span> &mdash; mobile phone remote control</li>
+          <li><span class="g">Spotlight plugin</span> &mdash; laser pointer via mouse</li>
+          <li><span class="b">Presentation API</span> &mdash; W3C standard for dual-screen</li>
+          <li><span class="p">WebRTC-based</span> &mdash; peer-to-peer without a server</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 18 — EMBEDDING & IFRAMES ═══════════════════════════════ -->
+<section>
+  <div class="slide-hdr"><span class="tag">18</span><h2>Embedding &amp; iframes</h2></div>
+  <div class="cols cols-6040">
+    <div>
+      <p>Reveal.js presentations can <span class="a">embed external content</span> and also <span class="g">be embedded</span> inside other pages. Lazy loading ensures performance stays snappy.</p>
+      <div class="card amber">
+        <h3>Embedding Content in Slides</h3>
+      </div>
+      <pre><code class="language-html">&lt;!-- Lazy-loaded iframe --&gt;
+&lt;iframe data-src="https://codepen.io/..."
+        width="100%" height="500"&gt;
+&lt;/iframe&gt;
+
+&lt;!-- Background iframe (full slide) --&gt;
+&lt;section data-background-iframe=
+           "https://threejs.org/examples/"
+         data-background-interactive&gt;
+  &lt;!-- Content overlays the iframe --&gt;
+&lt;/section&gt;
+
+&lt;!-- Auto-play media on slide enter --&gt;
+&lt;video data-autoplay data-src="demo.mp4"
+       width="800"&gt;&lt;/video&gt;</code></pre>
+    </div>
+    <div>
+      <div class="card green">
+        <h3>Embedding a Reveal Deck in a Page</h3>
+      </div>
+      <pre><code class="language-html">&lt;!-- Embed as an iframe --&gt;
+&lt;iframe src="slides.html"
+        width="800" height="600"
+        frameborder="0"&gt;
+&lt;/iframe&gt;</code></pre>
+      <pre><code class="language-javascript">// Enable embedded mode
+Reveal.initialize({
+  embedded: true,   // Only capture input when focused
+  keyboardCondition: 'focused'
+});</code></pre>
+      <div class="card purple" style="margin-top:.3em;">
+        <h3>Post-Message API</h3>
+        <p>Control an embedded deck from the parent page:</p>
+      </div>
+      <pre><code class="language-javascript">// Parent page controls the deck
+const iframe = document.querySelector('iframe');
+iframe.contentWindow.postMessage(
+  JSON.stringify({ method: 'slide', args: [2, 0] }),
+  '*'
+);</code></pre>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 19 — HOSTING & DEPLOYMENT ═══════════════════════════════ -->
+<section>
+  <div class="slide-hdr"><span class="tag">19</span><h2>Hosting &amp; Deployment</h2></div>
+  <p>Reveal.js presentations are <span class="a">static HTML</span> &mdash; deploy them anywhere you can serve files. No server-side runtime required.</p>
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3>GitHub Pages</h3>
+        <ul>
+          <li>Push your <code>index.html</code> to a repo</li>
+          <li>Enable Pages in repo Settings &rarr; Pages</li>
+          <li>Available at <code>username.github.io/repo</code></li>
+          <li>Free HTTPS, custom domains supported</li>
+        </ul>
+      </div>
+      <div class="card green" style="margin-top:.3em;">
+        <h3>Static Hosting Platforms</h3>
+        <ul>
+          <li><span class="a">Netlify</span> &mdash; drag-and-drop or Git deploy</li>
+          <li><span class="g">Vercel</span> &mdash; zero-config static hosting</li>
+          <li><span class="p">Cloudflare Pages</span> &mdash; fast edge CDN</li>
+          <li><span class="b">AWS S3 + CloudFront</span> &mdash; scalable and cheap</li>
+          <li><span class="r">Surge.sh</span> &mdash; <code>npx surge .</code> one-liner deploy</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card purple">
+        <h3>Single-File Approach</h3>
+        <p>Load Reveal.js from a CDN &mdash; your entire presentation is a single <code>index.html</code> file. No build step, no dependencies. Email it, put it on a USB stick, or host it anywhere.</p>
+      </div>
+      <div class="card blue" style="margin-top:.3em;">
+        <h3>CI/CD Pipeline</h3>
+      </div>
+      <pre><code class="language-yaml"># .github/workflows/deploy.yml
+name: Deploy Slides
+on:
+  push:
+    branches: [main]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v4
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+      - uses: actions/deploy-pages@v4</code></pre>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ SLIDE 20 — SUMMARY & NEXT STEPS ═══════════════════════════════ -->
+<section>
+  <div class="slide-hdr"><span class="tag">20</span><h2>Summary &amp; Next Steps</h2></div>
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3>What We Covered</h3>
+        <ul>
+          <li>Reveal.js fundamentals &mdash; HTML slide structure</li>
+          <li>Markdown authoring &amp; external files</li>
+          <li>Transitions, fragments, auto-animate</li>
+          <li>Code highlighting with line step-through</li>
+          <li>12 built-in themes &amp; custom CSS variables</li>
+          <li>Layout, media, and backgrounds</li>
+          <li>Speaker notes &amp; presenter view</li>
+          <li>Plugin architecture &amp; custom plugins</li>
+          <li>PDF export, multiplexing, embedding</li>
+          <li>Deployment to GitHub Pages &amp; static hosts</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card green">
+        <h3>Recommended Next Steps</h3>
+        <ul>
+          <li>Build a presentation from scratch using CDN</li>
+          <li>Try Markdown mode with external <code>.md</code> files</li>
+          <li>Experiment with auto-animate and fragments</li>
+          <li>Write a custom plugin using the API</li>
+          <li>Deploy to GitHub Pages for free hosting</li>
+        </ul>
+      </div>
+      <div class="card purple" style="margin-top:.3em;">
+        <h3>Essential Resources</h3>
+        <ul>
+          <li><span class="a">revealjs.com</span> &mdash; official docs &amp; live demos</li>
+          <li><span class="g">github.com/hakimel/reveal.js</span> &mdash; source code</li>
+          <li><span class="p">revealjs.com/plugins</span> &mdash; plugin directory</li>
+          <li><span class="b">slides.com</span> &mdash; visual editor built on Reveal.js</li>
+          <li><span class="r">github.com/hakimel</span> &mdash; Hakim El Hattab's projects</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <p style="text-align:center; margin-top:.5em; color:var(--muted); font-size:.5em;">
+    <span class="a">Thank you!</span> &mdash; Built with Reveal.js &middot; Single self-contained HTML file
+  </p>
+</section>
+
+
+</div><!-- /slides -->
+</div><!-- /reveal -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/highlight/highlight.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/highlight/monokai.min.css">
+<script>
+Reveal.initialize({
+  hash: true, transition: 'fade', transitionSpeed: 'fast', controls: true, progress: true,
+  center: false, width: 1100, height: 900, margin: 0.01,
+  plugins: [RevealHighlight], highlight: { theme: 'monokai' }
+});
+</script>
+<script>
+(function(){
+  var h = Reveal.getConfig().height || 900;
+  var m = Reveal.getConfig().margin || 0.02;
+  var maxH = Math.floor(h * (1 - 2 * m)) + 'px';
+  function fixSlides(){
+    document.querySelectorAll('.reveal .slides>section,.reveal .slides>section>section').forEach(function(s){
+      s.style.display = 'block'; s.style.maxHeight = maxH;
+    });
+  }
+  Reveal.on('ready', fixSlides);
+  Reveal.on('slidechanged', fixSlides);
+})();
+</script>
+</body>
+</html>
